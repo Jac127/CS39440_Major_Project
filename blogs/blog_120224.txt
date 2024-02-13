@@ -1,0 +1,1 @@
+13-02-24: Developed a prototype of the snake game, this was to build a base for the DNA snake game and experiment with PyGame
