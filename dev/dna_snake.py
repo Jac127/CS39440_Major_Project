@@ -2,7 +2,7 @@ import pygame
 import time
 import random
 
-# Initialise PyGame
+# Initialize PyGame
 pygame.init()
 
 # Define colors
@@ -11,6 +11,7 @@ black = (0, 0, 0)
 red = (213, 50, 80)
 green = (0, 255, 0)
 blue = (50, 153, 213)
+yellow = (255, 255, 0)
 
 # Set up window and display
 width, height = 600, 400
@@ -18,25 +19,32 @@ game_display = pygame.display.set_mode((width, height))
 pygame.display.set_caption('Snake Game Prototype')
 font_style = pygame.font.SysFont(None, 35)
 
-# Initialise game clock
+# Initialize game clock
 clock = pygame.time.Clock()
 
 # Snake properties
-snake_block = 10
-snake_speed = 15
+snake_block = 20
+snake_speed = 10
 
+# Define food colors and their effects on snake segments
+food_colors = {
+    'red': red,
+    'green': green,
+    'blue': blue,
+    'yellow': yellow,
+}
+# Randomly choose a food color to start
+current_food_color = random.choice(list(food_colors.values()))
 
-# Draw the snake
-def drawSnake(snake_block, snake_list):
-    for x in snake_list:
-        pygame.draw.rect(game_display, black, [x[0], x[1], snake_block, snake_block])
-
+# Draw the snake with segment-specific colors
+def drawSnake(snake_block, snake_list, segment_colors):
+    for i, segment in enumerate(snake_list):
+        pygame.draw.rect(game_display, segment_colors[i], [segment[0], segment[1], snake_block, snake_block])
 
 # Used to display text to the user
 def showText(msg, color):
     msg = font_style.render(msg, True, color)
     game_display.blit(msg, [width / 6, height / 3])
-
 
 def gameLoop():
     # Used to end the game
@@ -47,17 +55,19 @@ def gameLoop():
     x1 = width / 2
     y1 = height / 2
 
-    # Initialise the variables for change the snake's location
+    # Initialize the variables for changing the snake's location
     x1_change = 0
     y1_change = 0
 
-    # Initialise the snake variables
+    # Initialize the snake variables
     snake_segments = []
+    segment_colors = [black]  # Starting color of the snake
     snake_length = 1
 
     # Randomly place food
     foodx = round(random.randrange(0, width - snake_block) / 10.0) * 10.0
     foody = round(random.randrange(0, height - snake_block) / 10.0) * 10.0
+    current_food_color = random.choice(list(food_colors.values()))
 
     # Main game loop
     while not game_over:
@@ -99,47 +109,43 @@ def gameLoop():
         if x1 >= width or x1 < 0 or y1 >= height or y1 < 0:
             game_close = True
 
-        # Update the snake's position
         x1 += x1_change
         y1 += y1_change
-
-        # Fill game background
         game_display.fill(white)
 
-        # Draw food item
-        pygame.draw.rect(game_display, green, [foodx, foody, snake_block, snake_block])
+        # Draw food item with the current color
+        pygame.draw.rect(game_display, current_food_color, [foodx, foody, snake_block, snake_block])
 
-        # Update the snake and it's segments
         snake_head = [x1, y1]
         snake_segments.append(snake_head)
-
-        # Check the snake is the correct length
         if len(snake_segments) > snake_length:
             del snake_segments[0]
+
+        # Ensure segment_colors matches the length of snake_segments
+        if len(segment_colors) < len(snake_segments):
+            segment_colors.append(current_food_color)
 
         # Check if the snake collides with itself
         for x in snake_segments[:-1]:
             if x == snake_head:
                 game_close = True
 
-        # Draw the snake
-        drawSnake(snake_block, snake_segments)
+        drawSnake(snake_block, snake_segments, segment_colors)
         pygame.display.update()
 
         # Check if the food is eaten by the snake
-        if x1 == foodx and y1 == foody:
+        if x1 < foodx + snake_block and x1 + snake_block > foodx and y1 < foody + snake_block and y1 + snake_block > foody:
             # Reposition the food
             foodx = round(random.randrange(0, width - snake_block) / 10.0) * 10.0
             foody = round(random.randrange(0, height - snake_block) / 10.0) * 10.0
-            # Increase the length of the snake
             snake_length += 1
+            # Add the current food color to the new segment
+            segment_colors.append(current_food_color)
+            current_food_color = random.choice(list(food_colors.values()))  # Select new food color
 
-        # Manage game speed
         clock.tick(snake_speed)
 
-    # Handle quiting
     pygame.quit()
     quit()
-
 
 gameLoop()
