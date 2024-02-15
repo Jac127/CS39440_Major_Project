@@ -5,14 +5,6 @@ import random
 # Initialize PyGame
 pygame.init()
 
-# Define colors
-white = (255, 255, 255)
-black = (0, 0, 0)
-red = (213, 50, 80)
-green = (0, 255, 0)
-blue = (50, 153, 213)
-yellow = (255, 255, 0)
-
 # Set up window and display
 width, height = 600, 400
 game_display = pygame.display.set_mode((width, height))
@@ -24,27 +16,40 @@ clock = pygame.time.Clock()
 
 # Snake properties
 snake_block = 20
-snake_speed = 10
+snake_speed = 15
 
 # Define food colors and their effects on snake segments
-food_colors = {
-    'red': red,
-    'green': green,
-    'blue': blue,
-    'yellow': yellow,
+colours = {
+    'white': (255, 255, 255),
+    'black': (0, 0, 0),
+    'red': (213, 50, 80),
+    'green': (0, 255, 0),
+    'blue': (50, 153, 213),
+    'yellow': (255, 255, 0)
 }
-# Randomly choose a food color to start
-current_food_color = random.choice(list(food_colors.values()))
 
-# Draw the snake with segment-specific colors
-def drawSnake(snake_block, snake_list, segment_colors):
-    for i, segment in enumerate(snake_list):
-        pygame.draw.rect(game_display, segment_colors[i], [segment[0], segment[1], snake_block, snake_block])
+# Define which food colour corresponds to the DNA nucleotides
+nucleotide_colours = {
+    'A': 'red',
+    'T': 'green',
+    'G': 'blue',
+    'C': 'yellow'
+}
+
+# Randomly choose a food colour to start
+current_food_color = random.choice(list(nucleotide_colours))
+
 
 # Used to display text to the user
-def showText(msg, color):
+def showText(msg, color, x, y):
     msg = font_style.render(msg, True, color)
-    game_display.blit(msg, [width / 6, height / 3])
+    game_display.blit(msg, [x, y])
+
+
+# Retrieves colour from dictionary
+def getColour(colour):
+    return colours[colour]
+
 
 def gameLoop():
     # Used to end the game
@@ -61,21 +66,23 @@ def gameLoop():
 
     # Initialize the snake variables
     snake_segments = []
-    segment_colors = [black]  # Starting color of the snake
+    segment_nucleotides = ['A']  # Starting nucleotide of the snake
     snake_length = 1
 
     # Randomly place food
     foodx = round(random.randrange(0, width - snake_block) / 10.0) * 10.0
     foody = round(random.randrange(0, height - snake_block) / 10.0) * 10.0
-    current_food_color = random.choice(list(food_colors.values()))
+    food_nucleotide = random.choice(list(nucleotide_colours))
+    food_colour = colours.get(nucleotide_colours[food_nucleotide])
+
 
     # Main game loop
     while not game_over:
 
         # Loops when the game has ended until the player responds
         while game_close:
-            game_display.fill(white)
-            showText("You lost! Press Q-Quit or C-Play Again", red)
+            game_display.fill(getColour('white'))
+            showText("You lost! Press Q-Quit or C-Play Again", getColour('red'), width / 6, height / 3)
             pygame.display.update()
 
             # Handle user input for endgame
@@ -111,26 +118,27 @@ def gameLoop():
 
         x1 += x1_change
         y1 += y1_change
-        game_display.fill(white)
+        game_display.fill(getColour('white'))
 
-        # Draw food item with the current color
-        pygame.draw.rect(game_display, current_food_color, [foodx, foody, snake_block, snake_block])
+        # Draw food item with the current color and nucleotide character
+        pygame.draw.rect(game_display, food_colour, [foodx, foody, snake_block, snake_block])
+        showText(food_nucleotide, getColour('black'), foodx, foody)
 
         snake_head = [x1, y1]
         snake_segments.append(snake_head)
         if len(snake_segments) > snake_length:
             del snake_segments[0]
 
-        # Ensure segment_colors matches the length of snake_segments
-        if len(segment_colors) < len(snake_segments):
-            segment_colors.append(current_food_color)
-
         # Check if the snake collides with itself
         for x in snake_segments[:-1]:
             if x == snake_head:
                 game_close = True
 
-        drawSnake(snake_block, snake_segments, segment_colors)
+        # Draw the snake with segment-specific colors and DNA nucleotides
+        for i, segment in enumerate(snake_segments):
+            pygame.draw.rect(game_display, getColour(nucleotide_colours[segment_nucleotides[i]]), [segment[0], segment[1], snake_block, snake_block])
+            showText(segment_nucleotides[i], getColour('black'), segment[0], segment[1])
+
         pygame.display.update()
 
         # Check if the food is eaten by the snake
@@ -140,12 +148,17 @@ def gameLoop():
             foody = round(random.randrange(0, height - snake_block) / 10.0) * 10.0
             snake_length += 1
             # Add the current food color to the new segment
-            segment_colors.append(current_food_color)
-            current_food_color = random.choice(list(food_colors.values()))  # Select new food color
+            segment_nucleotides.append(food_nucleotide)
+
+            # Select new food colour and nucleotide
+            food_nucleotide = random.choice(list(nucleotide_colours))
+            food_colour = colours.get(nucleotide_colours[food_nucleotide])
+
 
         clock.tick(snake_speed)
 
     pygame.quit()
     quit()
+
 
 gameLoop()
