@@ -1,2 +1,3 @@
 13-02-24: Developed a prototype of the snake game, this was to build a base for the DNA snake game and experiment with PyGame
 14-02-24: Started work on the DNA version of snake. To emulate the 4 nucleotides I have modified the prototype to have 4 different food types that change the appearance of the snake.
+15-02-24: Planning on using SciPy (scipy.spatial.distance) for Manhattan distance in Minesweeper game
