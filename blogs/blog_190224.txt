@@ -1,0 +1,4 @@
+19-02-24: Added nucleotide pair checks. Unless the food and snake head have matching pairs the food segment will not be
+considered correct. For example A-T and G-C pairs are correct, but A-A pairs are not. An issue experienced in
+development: Forgot that not every character matches the ones next to it, to solve this I check the last three
+nucleotides instead of the last two, and check if there is at least a matching pair.
