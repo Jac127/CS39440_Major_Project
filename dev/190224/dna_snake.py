@@ -179,15 +179,14 @@ def gameLoop():
         # Draw GUI
         pygame.draw.line(game_display, colours['black'], (0, 320), (600, 320))
 
-        # Inside gameLoop, after the snake eats food and updates segment_nucleotides
-        valid_segments = checkNucleotideString(segment_nucleotides)
-
         # When displaying the current DNA sequence, modify the loop to check validity and set color
+        valid_segments = checkNucleotideString(segment_nucleotides)
+        
         for i, segment in enumerate(segment_nucleotides):
             # Determine the color based on segment validity
             color = getColour('red') if not valid_segments[i] else getColour('black')
 
-            # Calculate position for each character (adjust as necessary)
+            # Calculate position for each character
             x_pos = 0 + (i * snake_block)
             y_pos = playable_height + ((height - playable_height) / 2)
 
