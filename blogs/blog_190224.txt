@@ -34,3 +34,8 @@ chance that no correct food options will be presented to the player.
 Need to add win condition when the player reaches a length of 30 nucleotides. For the saving feature, I would also like
 to show the player the accuracy of the DNA eating (sampling) and this will affect their score, somehow I would like to
 calculate a percentage score. This should also be shown if the player loses the game.
+
+Added the win condition, and the DNA string is saved when it is reached, the player is asked if they want to play again
+or quit. In the future I will add the score and length to the CSV files too, which will help with later games as well as
+incentive the player to beat their score. On the webpage that the game is hosted on stats and scores will be displayed
+and made available.

@@ -1,5 +1,5 @@
 import pygame
-import time
+import csv
 import random
 
 # Define colors and their rgb values
@@ -95,10 +95,19 @@ def checkNucleotideString(segments):
     return valid_segments
 
 
+# Save the player's created string
+def saveString(string):
+    with open('snake_scores.csv', 'a', newline='') as csvfile:
+        writer = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        writer.writerow([string])
+
+
 def gameLoop():
     # Used to end the game
     game_over = False
+    game_lost = False
     game_close = False
+    saved = False
 
     playable_height = 320  # 520 is the height of the playable area
 
@@ -132,7 +141,11 @@ def gameLoop():
         # Loops when the game has ended until the player responds
         while game_close:
             game_display.fill(getColour('white'))
-            showText("You lost! Press Q-Quit or C-Play Again", getColour('red'), width / 6, playable_height / 3)
+            if game_lost:
+                showText("You lost! Press Q-Quit or C-Play Again", getColour('red'), width / 6, playable_height / 3)
+            else:
+                showText("You completed the sequence!", getColour('green'), width / 6, playable_height / 3)
+                showText("Press Q-Quit or C-Play Again", getColour('green'), width / 6, playable_height / 3 + snake_block)
             pygame.display.update()
 
             # Handle user input for endgame
@@ -162,8 +175,17 @@ def gameLoop():
                     y1_change = snake_block
                     x1_change = 0
 
-        # Check if the snake collides with the outer walls
+        # Check if the snake collides with the outer walls end the game
         if x1 >= width or x1 < 0 or y1 >= playable_height or y1 < 0:
+            game_lost = True
+            game_close = True
+
+        # If the string reaches length of 30 the player wins
+        if len(segment_nucleotides) > 29:
+            # Prevents duplicate lines being saved
+            if not saved:
+                saveString(segment_nucleotides)
+                saved = True
             game_close = True
 
         x1 += x1_change
@@ -201,6 +223,7 @@ def gameLoop():
         # Check if the snake collides with itself
         for x in snake_segments[:-1]:
             if x == snake_head:
+                game_lost = True
                 game_close = True
 
         # Draw the snake with segment-specific colors and DNA nucleotides
