@@ -1,9 +1,12 @@
-13-02-24: Developed a prototype of the snake game, this was to build a base for the DNA snake game and experiment with
+13-02-24:
+Developed a prototype of the snake game, this was to build a base for the DNA snake game and experiment with
 PyGame
 
-14-02-24: Started work on the DNA version of snake. To emulate the 4 nucleotides I have modified the prototype to have 4
+14-02-24:
+Started work on the DNA version of snake. To emulate the 4 nucleotides I have modified the prototype to have 4
 different food types that change the appearance of the snake.
 
-15-02-24: Planning on using SciPy (scipy.spatial.distance) for Manhattan distance in Minesweeper game. Added nucleotides
+15-02-24:
+Planning on using SciPy (scipy.spatial.distance) for Manhattan distance in Minesweeper game. Added nucleotides
 to snake game, so now the characters are displayed on the food and the snake. Got stuck on a bug where the colour was
 being passed to the snake array rather than the nucleotide character, causing a key error. Took hours to fix

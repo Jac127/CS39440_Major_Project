@@ -1,1 +1,2 @@
-07-02-24: Wrote ideas down project outline. Uploaded doc to git and created blogs folder for keeping track of assignments.
+07-02-24:
+Wrote ideas down project outline. Uploaded doc to git and created blogs folder for keeping track of assignments.

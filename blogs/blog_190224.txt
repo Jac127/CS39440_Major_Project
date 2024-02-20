@@ -1,4 +1,22 @@
-19-02-24: Added nucleotide pair checks. Unless the food and snake head have matching pairs the food segment will not be
+19-02-24:
+Added nucleotide pair checks. Unless the food and snake head have matching pairs the food segment will not be
 considered correct. For example A-T and G-C pairs are correct, but A-A pairs are not. An issue experienced in
 development: Forgot that not every character matches the ones next to it, to solve this I check the last three
 nucleotides instead of the last two, and check if there is at least a matching pair.
+
+Issue: The current way of checking matching pairs also picks up on pairs that are not actually related to each other, to
+fix this I added not statements to avoid false positives in incomplete pairs. This approach did not work added attempt
+at fix to issue comment for future reference. I believe I have fixed it by only checking if the nucleotides are valid
+when the string length is divisible by 2. This ensures that we are checking complete pairs and removes the risk of false
+positives.
+
+
+When adding the multiple food sources, I decided that only one of the food items needs to be a correct answer, so I
+add one food item that has the correct answer and the other nucleotide is chosen randomly for the second food.
+
+Now facing a major bug, the snake appears to eat food when it does not intersect with it - "if (x1 < food_one_x +
+snake_block and x1 + snake_block > food_one_x and y1 < food_one_y + snake_block) or (x1 < food_two_x + snake_block and
+x1 + snake_block > food_two_x and y1 < food_two_y + snake_block):" appeared to be the problem, however I do not know
+why, for now I have replaced it with a collision detection system, but I should look into it further.
+
+My code now needs major refactoring as the prototype development has led to bad code practices.
