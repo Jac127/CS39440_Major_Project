@@ -20,3 +20,17 @@ x1 + snake_block > food_two_x and y1 < food_two_y + snake_block):" appeared to b
 why, for now I have replaced it with a collision detection system, but I should look into it further.
 
 My code now needs major refactoring as the prototype development has led to bad code practices.
+
+
+20-02-24:
+Began adding the GUI element to show the player their progress. It sits along the bottom of the screen, I have changed
+the height values of the game, so that the snake and food can no longer be below the GUI region. Changing the algorithm
+that finds matching pairs, the function now returns a string of bools that can be used to colour the string displayed to
+ the player, representing the correct and incorrect choices.
+
+Found issue with invalid nucleotide detection, if a sequence of character is like xyx, or ata, or gcg then there is a
+chance that no correct food options will be presented to the player.
+
+Need to add win condition when the player reaches a length of 30 nucleotides. For the saving feature, I would also like
+to show the player the accuracy of the DNA eating (sampling) and this will affect their score, somehow I would like to
+calculate a percentage score. This should also be shown if the player loses the game.

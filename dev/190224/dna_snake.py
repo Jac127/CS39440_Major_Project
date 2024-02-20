@@ -2,6 +2,16 @@ import pygame
 import time
 import random
 
+# Define colors and their rgb values
+colours = {
+    'white': (255, 255, 255),
+    'black': (0, 0, 0),
+    'red': (213, 50, 80),
+    'green': (0, 255, 0),
+    'blue': (50, 153, 213),
+    'yellow': (255, 255, 0)
+}
+
 # Initialize PyGame
 pygame.init()
 
@@ -17,16 +27,6 @@ clock = pygame.time.Clock()
 # Snake properties
 snake_block = 20
 snake_speed = 15
-
-# Define food colors and their effects on snake segments
-colours = {
-    'white': (255, 255, 255),
-    'black': (0, 0, 0),
-    'red': (213, 50, 80),
-    'green': (0, 255, 0),
-    'blue': (50, 153, 213),
-    'yellow': (255, 255, 0)
-}
 
 # Define which food colour corresponds to the DNA nucleotides
 nucleotide_colours = {
@@ -80,22 +80,19 @@ def check_collision(x1, y1, x2, y2, block_size):
 # Checks if nucleotides are matching pairs or if a new matching pair is possible
 def checkNucleotideString(segments):
     no_segments = len(segments)
+    valid_segments = []
 
-    # If all pairs are complete
-    if no_segments % 2 == 0:
-        slicedString = segments[-2:]
-
-        if no_segments > 2:  # Prevents a warning being thrown at the start of the game before the sequence reaches a valuable length
-            if 'AT' in slicedString:
-                return
-            elif 'TA' in slicedString:
-                return
-            elif 'GC' in slicedString:
-                return
-            elif 'CG' in slicedString:
-                return
+    for i in range(0, no_segments, 2):
+        if i + 1 < no_segments:  # Ensure there is a pair to check
+            pair = segments[i:i+2]
+            if pair in ['AT', 'TA', 'GC', 'CG']:
+                valid_segments.extend([True, True])
             else:
-                print('Invalid nucleotide')
+                valid_segments.extend([False, False])
+        else:
+            valid_segments.append(False)  # Single segment without a pair is considered invalid
+
+    return valid_segments
 
 
 def gameLoop():
@@ -103,9 +100,11 @@ def gameLoop():
     game_over = False
     game_close = False
 
+    playable_height = 320  # 520 is the height of the playable area
+
     # Position the snake in the middle
     x1 = width / 2
-    y1 = height / 2
+    y1 = playable_height / 2
 
     # Initialize the variables for changing the snake's location
     x1_change = 0
@@ -118,12 +117,12 @@ def gameLoop():
 
     # Randomly place food items
     food_one_x = round(random.randrange(0, width - snake_block) / 10.0) * 10.0
-    food_one_y = round(random.randrange(0, height - snake_block) / 10.0) * 10.0
+    food_one_y = round(random.randrange(0, playable_height - snake_block) / 10.0) * 10.0
     food_one_nucleotide = 'T'
     food_one_colour = colours.get(nucleotide_colours[food_one_nucleotide])
 
     food_two_x = round(random.randrange(0, width - snake_block) / 10.0) * 10.0
-    food_two_y = round(random.randrange(0, height - snake_block) / 10.0) * 10.0
+    food_two_y = round(random.randrange(0, playable_height - snake_block) / 10.0) * 10.0
     food_two_nucleotide = random.choice(list(nucleotide_colours.keys()))
     food_two_colour = colours.get(nucleotide_colours[food_two_nucleotide])
 
@@ -133,7 +132,7 @@ def gameLoop():
         # Loops when the game has ended until the player responds
         while game_close:
             game_display.fill(getColour('white'))
-            showText("You lost! Press Q-Quit or C-Play Again", getColour('red'), width / 6, height / 3)
+            showText("You lost! Press Q-Quit or C-Play Again", getColour('red'), width / 6, playable_height / 3)
             pygame.display.update()
 
             # Handle user input for endgame
@@ -164,7 +163,7 @@ def gameLoop():
                     x1_change = 0
 
         # Check if the snake collides with the outer walls
-        if x1 >= width or x1 < 0 or y1 >= height or y1 < 0:
+        if x1 >= width or x1 < 0 or y1 >= playable_height or y1 < 0:
             game_close = True
 
         x1 += x1_change
@@ -176,6 +175,24 @@ def gameLoop():
         showText(food_one_nucleotide, getColour('black'), food_one_x, food_one_y)
         pygame.draw.rect(game_display, food_two_colour, [food_two_x, food_two_y, snake_block, snake_block])
         showText(food_two_nucleotide, getColour('black'), food_two_x, food_two_y)
+
+        # Draw GUI
+        pygame.draw.line(game_display, colours['black'], (0, 320), (600, 320))
+
+        # Inside gameLoop, after the snake eats food and updates segment_nucleotides
+        valid_segments = checkNucleotideString(segment_nucleotides)
+
+        # When displaying the current DNA sequence, modify the loop to check validity and set color
+        for i, segment in enumerate(segment_nucleotides):
+            # Determine the color based on segment validity
+            color = getColour('red') if not valid_segments[i] else getColour('black')
+
+            # Calculate position for each character (adjust as necessary)
+            x_pos = 0 + (i * snake_block)
+            y_pos = playable_height + ((height - playable_height) / 2)
+
+            # Display each nucleotide with the determined color
+            showText(segment, color, x_pos, y_pos)
 
         snake_head = [x1, y1]
         snake_segments.append(snake_head)
@@ -207,25 +224,25 @@ def gameLoop():
 
             # Reposition the food
             food_one_x = round(random.randrange(0, width - snake_block) / 10.0) * 10.0
-            food_one_y = round(random.randrange(0, height - snake_block) / 10.0) * 10.0
+            food_one_y = round(random.randrange(0, playable_height - snake_block) / 10.0) * 10.0
             food_two_x = round(random.randrange(0, width - snake_block) / 10.0) * 10.0
-            food_two_y = round(random.randrange(0, height - snake_block) / 10.0) * 10.0
+            food_two_y = round(random.randrange(0, playable_height - snake_block) / 10.0) * 10.0
             snake_length += 1
 
             # Assign nucleotides to food, based on the last characters eaten
             last_two_chars = segment_nucleotides[-2:]
 
             if 'AT' in last_two_chars:
-                food_one_nucleotide = random.choice(list(nucleotide_colours))
+                food_one_nucleotide = random.choice(list(['G', 'C']))
                 food_one_colour = colours.get(nucleotide_colours[food_one_nucleotide])
             elif 'TA' in last_two_chars:
-                food_one_nucleotide = random.choice(list(nucleotide_colours))
+                food_one_nucleotide = random.choice(list(['G', 'C']))
                 food_one_colour = colours.get(nucleotide_colours[food_one_nucleotide])
             elif 'GC' in last_two_chars:
-                food_one_nucleotide = random.choice(list(nucleotide_colours))
+                food_one_nucleotide = random.choice(list(['A', 'T']))
                 food_one_colour = colours.get(nucleotide_colours[food_one_nucleotide])
             elif 'CG' in last_two_chars:
-                food_one_nucleotide = random.choice(list(nucleotide_colours))
+                food_one_nucleotide = random.choice(list(['A', 'T']))
                 food_one_colour = colours.get(nucleotide_colours[food_one_nucleotide])
             else:
                 last_char = last_two_chars[1]
@@ -244,8 +261,7 @@ def gameLoop():
                     food_one_nucleotide = 'G'
                     food_one_colour = colours.get(nucleotide_colours[food_one_nucleotide])
 
-            checkNucleotideString(segment_nucleotides)
-
+        checkNucleotideString(segment_nucleotides)
         clock.tick(snake_speed)
 
     pygame.quit()
