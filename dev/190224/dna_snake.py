@@ -1,3 +1,5 @@
+import copy
+
 import pygame
 import csv
 import random
@@ -244,44 +246,35 @@ def gameLoop():
                 # Add the current food color to the new segment
                 segment_nucleotides += food_two_nucleotide
 
-            # Reposition the food
+            # Reposition the food and update snake
             food_one_x = round(random.randrange(0, width - snake_block) / 10.0) * 10.0
             food_one_y = round(random.randrange(0, playable_height - snake_block) / 10.0) * 10.0
             food_two_x = round(random.randrange(0, width - snake_block) / 10.0) * 10.0
             food_two_y = round(random.randrange(0, playable_height - snake_block) / 10.0) * 10.0
             snake_length += 1
 
-            # Assign nucleotides to food, based on the last characters eaten
-            last_two_chars = segment_nucleotides[-2:]
+            if not len(checkNucleotideString(segment_nucleotides)) % 2:
+                # If there are no incomplete pairs, begin the next one
+                food_one_nucleotide = random.choice(list(nucleotide_colours.keys()))
+                food_two_nucleotide = random.choice(list(nucleotide_colours.keys()))
 
-            if 'AT' in last_two_chars:
-                food_one_nucleotide = random.choice(list(['G', 'C']))
-                food_one_colour = colours.get(nucleotide_colours[food_one_nucleotide])
-            elif 'TA' in last_two_chars:
-                food_one_nucleotide = random.choice(list(['G', 'C']))
-                food_one_colour = colours.get(nucleotide_colours[food_one_nucleotide])
-            elif 'GC' in last_two_chars:
-                food_one_nucleotide = random.choice(list(['A', 'T']))
-                food_one_colour = colours.get(nucleotide_colours[food_one_nucleotide])
-            elif 'CG' in last_two_chars:
-                food_one_nucleotide = random.choice(list(['A', 'T']))
-                food_one_colour = colours.get(nucleotide_colours[food_one_nucleotide])
             else:
-                last_char = last_two_chars[1]
+                # Provide a correct answer for the player
+                last_char = segment_nucleotides[-1:]
 
                 # Set food nucleotide to matching pair
                 if last_char == 'A':
                     food_one_nucleotide = 'T'
-                    food_one_colour = colours.get(nucleotide_colours[food_one_nucleotide])
                 elif last_char == 'T':
                     food_one_nucleotide = 'A'
-                    food_one_colour = colours.get(nucleotide_colours[food_one_nucleotide])
                 elif last_char == 'G':
                     food_one_nucleotide = 'C'
-                    food_one_colour = colours.get(nucleotide_colours[food_one_nucleotide])
-                elif last_char == 'C':
+                else:
                     food_one_nucleotide = 'G'
-                    food_one_colour = colours.get(nucleotide_colours[food_one_nucleotide])
+
+            # Update food colours
+            food_one_colour = colours[nucleotide_colours[food_one_nucleotide]]
+            food_two_colour = colours[nucleotide_colours[food_two_nucleotide]]
 
         checkNucleotideString(segment_nucleotides)
         clock.tick(snake_speed)

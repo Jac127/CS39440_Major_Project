@@ -39,3 +39,8 @@ Added the win condition, and the DNA string is saved when it is reached, the pla
 or quit. In the future I will add the score and length to the CSV files too, which will help with later games as well as
 incentive the player to beat their score. On the webpage that the game is hosted on stats and scores will be displayed
 and made available.
+
+22-02-24
+Fixed aforementioned bug. Done by remodelling the way food nucleotides are selected, if there are an even number of
+nucleotides the string that means that the pairs are complete, which means any food type can be generated, otherwise
+one food item will be set to the correct nucleotide.
