@@ -44,3 +44,8 @@ and made available.
 Fixed aforementioned bug. Done by remodelling the way food nucleotides are selected, if there are an even number of
 nucleotides the string that means that the pairs are complete, which means any food type can be generated, otherwise
 one food item will be set to the correct nucleotide.
+
+Refactoring:
+    Food variables now stored in a list, this includes the nucleotide char, so the code now converts between in and char
+    when needed.
+    Reorganised several things to make more readable
