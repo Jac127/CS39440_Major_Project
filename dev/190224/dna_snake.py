@@ -18,7 +18,7 @@ pygame.init()
 # Set up window and display
 width, height = 600, 400
 game_display = pygame.display.set_mode((width, height))
-playable_height = 320  # 520 is the height of the playable area
+playable_height = 320  # 320 is the height of the playable area
 pygame.display.set_caption('Snake Game Prototype')
 font_style = pygame.font.SysFont(None, 35)
 
@@ -137,6 +137,12 @@ def gameLoop():
         # Loops when the game has ended until the player responds
         while game_close:
             game_display.fill(colours['white'])
+            # Prevents duplicate lines being saved
+            if not saved:
+                if len(snake_segments) > 7:
+                    saveString(segment_nucleotides)
+                saved = True
+
             if game_lost:
                 showText("You lost! Press Q-Quit or C-Play Again", colours['red'], width / 6, playable_height / 3)
             else:
@@ -178,10 +184,6 @@ def gameLoop():
 
         # If the string reaches length of 30 the player wins
         if len(segment_nucleotides) > 29:
-            # Prevents duplicate lines being saved
-            if not saved:
-                saveString(segment_nucleotides)
-                saved = True
             game_close = True
 
         # Update display

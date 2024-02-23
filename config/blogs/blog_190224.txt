@@ -49,3 +49,15 @@ Refactoring:
     Food variables now stored in a list, this includes the nucleotide char, so the code now converts between in and char
     when needed.
     Reorganised several things to make more readable
+
+
+Began development of minesweeper prototype, however I decided that I should leave it for later. In the project outline I
+wrote that the minesweeper-like game would be the second game, but now I believe it is better suited to be the third
+game. This is because the point of it was to find similar sequences using the Manhattan distance metric, however, I now
+realise that it would be better to have complete DNA sequences to teach this, so the second game will now be about
+combining the sequences found in the snake game, and then these will be fed into the minesweeper game where the player
+will attempt to classify them. Also decided that the snake game should save all DNA strings over length 8, these can be
+combined in the second game to complete sequences that are length 30.
+
+Also began the development of the second game. The tiles now are displayed (currently only black) and there is a
+function to change the colour based on the DNA read in.
