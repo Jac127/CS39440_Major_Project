@@ -1,3 +1,6 @@
 28-02-24:
 Added feature on tile merge prototype, the player can now select a square to begin with and the corresponding sequence
 is displayed in the GUI. Began developing the moving tiles however having trouble with the algorithm.
+
+29-02-24:
+Fixed tile moving algorithm

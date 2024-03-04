@@ -99,28 +99,28 @@ def moveTiles(direction, tiles):
 
     # Move tiles to fill empty space
     if direction == 'up':
-        while 3 > empty_TileY > 0:
-            tiles[empty_TileX][empty_TileY] = tiles[empty_TileX][empty_TileY - 1]
-            empty_TileY = empty_TileY - 1
-        tiles[empty_TileX][empty_TileY] = ''
+        while empty_TileY < 3:
+            tiles[empty_TileX][empty_TileY] = tiles[empty_TileX][empty_TileY + 1]
+            empty_TileY = empty_TileY + 1
+            tiles[empty_TileX][empty_TileY] = ''
 
     if direction == 'down':
-        while 3 > empty_TileY > 0:
-            tiles[empty_TileX][empty_TileY] = tiles[empty_TileX][empty_TileY + 1]
-            empty_TileY += 1
-        tiles[empty_TileX][empty_TileY] = ''
+        while empty_TileY > 0:
+            tiles[empty_TileX][empty_TileY] = tiles[empty_TileX][empty_TileY - 1]
+            empty_TileY -= 1
+            tiles[empty_TileX][empty_TileY] = ''
 
     if direction == 'left':
-        while 3 > empty_TileX > 0:
-            tiles[empty_TileX][empty_TileY] = tiles[empty_TileX - 1][empty_TileY]
-            empty_TileX -= 1
-        tiles[empty_TileX][empty_TileY] = ''
-
-    if direction == 'right':
-        while 3 > empty_TileX > 0:
+        while empty_TileX < 3:
             tiles[empty_TileX][empty_TileY] = tiles[empty_TileX + 1][empty_TileY]
             empty_TileX += 1
-        tiles[empty_TileX][empty_TileY] = ''
+            tiles[empty_TileX][empty_TileY] = ''
+
+    if direction == 'right':
+        while empty_TileX > 0:
+            tiles[empty_TileX][empty_TileY] = tiles[empty_TileX - 1][empty_TileY]
+            empty_TileX -= 1
+            tiles[empty_TileX][empty_TileY] = ''
 
     return tiles
 
@@ -178,7 +178,7 @@ def gameLoop(tiles):
                     tiles = moveTiles('left', tiles)
                 if event.key == pygame.K_RIGHT:
                     tiles = moveTiles('right', tiles)
-        print('Ok')
+
         drawTiles(tiles)
         pygame.display.update()
 
