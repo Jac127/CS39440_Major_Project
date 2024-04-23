@@ -1,0 +1,3 @@
+26-03-24:
+    Tiles now merge if they are the same, will now change it so that tiles will merge if there is an overlap.
+    Now added merging at the overlap.

@@ -1,0 +1,20 @@
+16-04-24:
+    Planning on working on the snake game. I will add a specific sequence that the player needs to create and represent
+    the opposite using a DNA graphic along the bottom. As the player completes the sequence, the graphic will update.
+
+    Done a total revamp of the snake game, now has a set sequence the player must complete and a much more intuitive way
+    of representing it. The food is now generated with this sequence in mind, there is still random food choices for
+    difficulty.
+
+    Attempted to set up using pygbag again and the previous error has gone, however there still remains to be a blank,
+    black screen.
+
+    Next plans:
+        - Add instructions and explain how it relates to the DNA concepts being taught
+        - Add a score based on percentage of correct nucleotides
+
+18-04-24:
+    Have decided to scrap the idea of having a website to host the games and tutorials, I cannot get pygbag to work, if
+    I have free time at the end perhaps I can consider attempting to set it up again.
+    Added sequence accuracy metric, next need to add the score to the csv file, also could calculate an overall score
+    based on sequence length and accuracy

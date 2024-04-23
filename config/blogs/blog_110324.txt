@@ -1,0 +1,7 @@
+17-03-24:
+I have made the decision that the snake sequences will be 12 length, as will the sequences on each tile before merging,
+I am yet to edit the snake game to account for this, and instead am just slicing the sequences in the tile merge game.
+
+Continued development of the tile merge game.
+
+Added in tile spawning and fixed movement. Added endgame condition
