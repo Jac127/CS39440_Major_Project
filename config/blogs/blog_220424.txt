@@ -1,3 +1,6 @@
 23-04-24:
     Created a basic start to an RPG game which will eventually become my DNA version of paperboy. It features a character
-    (a sqaure that you can move with the arrow keys) and a scrolling background
+    (a square that you can move with the arrow keys) and a scrolling background
+
+24-04-24:
+    Added basic background map in the paperboy like RPG
