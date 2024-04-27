@@ -1,5 +1,4 @@
 import time
-
 import pygame
 import csv
 import random
@@ -37,7 +36,9 @@ clock = pygame.time.Clock()
 # Game object properties
 block_size = 20
 snake_speed = 15
-foodString = 'ATGCTAGCGCTAGCCGATCGATATCG'  # String of food that will be added during the game
+
+bases = 'ATGC'
+foodString = ''.join(random.choice(bases) for _ in range(25))  # String of food that will be added during the game
 
 # Used to store character spacing in the GUI
 GUI_charKey = [17, 12, 9, 25, 20, 17, 16, 34, 30, 26, 26, 45, 41, 38, 37, 55, 52, 49, 48, 65, 62, 58, 57, 79, 77, 72]
@@ -145,7 +146,6 @@ def main():
     game_over = False
     game_lost = False
     game_close = False
-    saved = False
 
     # Position the snake in the middle
     x1 = width / 2
@@ -157,7 +157,7 @@ def main():
 
     # Initialize the snake variables
     snake_segments = []
-    segment_nucleotides = 'A'  # Starting nucleotide of the snake
+    segment_nucleotides = foodString[0]  # Starting nucleotide of the snake
     snake_length = 1
 
     foodNo = 1
@@ -182,11 +182,6 @@ def main():
         # Loops when the game has ended until the player responds
         while game_close:
             game_display.fill(colours['white'])
-            # Prevents duplicate lines being saved
-            if not saved:
-                if len(snake_segments) > 7:
-                    saveString(segment_nucleotides)
-                saved = True
 
             if game_lost:
                 showText("You had an accuracy of " + ((str(SequenceMatcher(None, segment_nucleotides, foodString[:len(segment_nucleotides)]).ratio() * 100))[:3] + '%'), colours['red'], width / 6, playable_height / 3 - block_size)
@@ -195,6 +190,7 @@ def main():
                 showText("You had an accuracy of " + ((str(SequenceMatcher(None, segment_nucleotides, foodString[:len(segment_nucleotides)]).ratio() * 100))[:3] + '%'), colours['red'], width / 6, playable_height / 3 - block_size)
                 showText("You completed the sequence!", colours['green'], width / 6, playable_height / 3)
                 showText("Press Q-Quit or C-Play Again", colours['green'], width / 6, playable_height / 3 + block_size)
+                saveString(segment_nucleotides)
             pygame.display.update()
 
             # Handle user input for endgame
@@ -229,7 +225,7 @@ def main():
             game_lost = True
             game_close = True
 
-        # If the string reaches length of 30 the player wins
+        # If the string reaches length of 24 the player wins
         if len(segment_nucleotides) > 23:
             game_close = True
 

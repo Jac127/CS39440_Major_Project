@@ -8,8 +8,6 @@ pygame.init()
 width, height = 1500, 750
 game_display = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Scrolling Background")
-# Cap the frame rate
-pygame.time.Clock().tick(60)
 
 # Define colors and their rgb values
 colours = {
@@ -27,7 +25,11 @@ background_rect = background.get_rect()
 
 # Set up the player
 # Takes image generated from character selection
-playerImg = pygame.image.load("assets/generatedCharacter.png").convert_alpha()
+
+with open('snake_scores.csv', 'r') as f:
+    last_line = f.readlines()[-1]  # Extract filename
+
+playerImg = pygame.image.load("assets/character_options/" + last_line[:24] + ".png").convert_alpha()
 player = pygame.Rect(370, 0, 20, 20)
 player_speed = 5
 
@@ -53,6 +55,9 @@ roads = [
     pygame.Rect(1245, 530, 245, 1),
     pygame.Rect(1245, 635, 245, 1),
     pygame.Rect(1245, 737, 245, 1)]
+
+
+# Player select function
 
 
 # Main game function
@@ -118,6 +123,9 @@ def main():
 
         # Update the display
         pygame.display.flip()
+
+        # Cap the frame rate
+        pygame.time.Clock().tick(60)
 
 
 main()

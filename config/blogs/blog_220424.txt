@@ -23,3 +23,12 @@
     when trying to save the image and using it in the game the resolution is wrong, and it contains the axis.
     Using PIL instead but there seems to be a processing error. EASY FIX, just needed to set Image.fromArray(mode: 'RGBA'
     instead of 'RGB', there is an alpha value as the character has transparency
+
+27-04-24:
+    Passing segments of the dna sequence to a hash function then using hexdigest() to get a colour code. This colour
+    code is being assigned to parts of the character
+
+    The snake game now will produce a random sequence on game completion, when the image generation script is run, it
+    now generates an image based on this, and when the paperboy game is ran, it automatically takes the image and uses
+    it as the character.
+
