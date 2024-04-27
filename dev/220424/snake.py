@@ -146,6 +146,7 @@ def main():
     game_over = False
     game_lost = False
     game_close = False
+    saved = False
 
     # Position the snake in the middle
     x1 = width / 2
@@ -184,13 +185,22 @@ def main():
             game_display.fill(colours['white'])
 
             if game_lost:
-                showText("You had an accuracy of " + ((str(SequenceMatcher(None, segment_nucleotides, foodString[:len(segment_nucleotides)]).ratio() * 100))[:3] + '%'), colours['red'], width / 6, playable_height / 3 - block_size)
                 showText("You lost! Press Q-Quit or C-Play Again", colours['red'], width / 6, playable_height / 3)
+                showText("You had an accuracy of " + ((str(SequenceMatcher(None, segment_nucleotides, foodString[:len(
+                    segment_nucleotides)]).ratio() * 100))[:3] + '%'), colours['red'], width / 6,
+                         playable_height / 3 - block_size)
             else:
-                showText("You had an accuracy of " + ((str(SequenceMatcher(None, segment_nucleotides, foodString[:len(segment_nucleotides)]).ratio() * 100))[:3] + '%'), colours['red'], width / 6, playable_height / 3 - block_size)
                 showText("You completed the sequence!", colours['green'], width / 6, playable_height / 3)
+                showText("You had an accuracy of " + ((str(SequenceMatcher(None, segment_nucleotides, foodString[:len(
+                    segment_nucleotides)]).ratio() * 100))[:3] + '%'), colours['green'], width / 6,
+                         playable_height / 3 - block_size)
                 showText("Press Q-Quit or C-Play Again", colours['green'], width / 6, playable_height / 3 + block_size)
-                saveString(segment_nucleotides)
+
+                # Prevents duplicate lines being saved
+                if not saved:
+                    saveString(segment_nucleotides)
+                    saved = True
+
             pygame.display.update()
 
             # Handle user input for endgame

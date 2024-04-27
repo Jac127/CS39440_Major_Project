@@ -1,3 +1,5 @@
+import hashlib
+
 import pygame
 from PIL import Image
 
@@ -62,6 +64,21 @@ def showText(msg, color, x, y):
     game_display.blit(msg, [x, y])
 
 
+# Generates 10 numbers from the DNA sequence between 1 and 34, which is used as the paper route
+def generate_numbers(dna):
+    # Generate SHA-256 hash
+    hashed = hashlib.sha256(dna.encode()).digest()
+
+    # Convert hash to a list of integers
+    integers = [int(byte) for byte in hashed]
+
+    # Generate 10 numbers between 1 and 34 (inclusive)
+    numbers = [(x % 34) + 1 for x in integers]
+    print(numbers)
+
+    return numbers[:10]
+
+
 # Player select function
 def playerSelect():
     game_display.fill(colours['white'])
@@ -90,6 +107,13 @@ def playerSelect():
         game_display.blit(character_background, (0, 0))
         game_display.blit(playerOnScreen, (600, 175))
         showText(line[:24], colours['black'], 570, 100)
+
+        showText("The character's first eight genes: '" + playerSelection[:8] +
+                 "' are expressed within the primary clothing colour", colours['black'], 50, 500)
+        showText("The character's next eight genes: '" + playerSelection[8:16] +
+                 "' are expressed within the secondary clothing colour", colours['black'], 50, 550)
+        showText("The character's last eight genes: '" + playerSelection[16:] +
+                 "' are expressed within the character's bike colour", colours['black'], 50, 600)
 
         pygame.display.update()
 
@@ -134,6 +158,8 @@ def main():
     displayInstructions()
     playerSelection = playerSelect()
     playerImg = pygame.image.load("assets/character_options/" + playerSelection + ".png")
+
+    generate_numbers(playerSelection)
 
     # Main game loop
     while not game_over:

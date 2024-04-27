@@ -91,15 +91,15 @@ dna = last_line[:24]
 
 # Render secondary clothes colour
 for each in secondaryClothes:
-    editableArray[each[0], [each[1]]] = [pick_color(dna[3:5])]
+    editableArray[each[0], [each[1]]] = [pick_color(dna[8:16])]
 
 # Render primary clothes colour
 for each in clothes:
-    editableArray[each[0], [each[1]]] = [pick_color(dna[0:2])]
+    editableArray[each[0], [each[1]]] = [pick_color(dna[:8])]
 
 # Render bike colour
 for each in bike:
-    editableArray[each[0], [each[1]]] = [pick_color(dna[11:14])]
+    editableArray[each[0], [each[1]]] = [pick_color(dna[16:])]
 
 plt.imshow(editableArray)
 plt.show()
