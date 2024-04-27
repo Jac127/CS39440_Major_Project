@@ -4,3 +4,22 @@
 
 24-04-24:
     Added basic background map in the paperboy like RPG
+
+25-04-24:
+    Added option to click through instructions
+    Finished map for paperboy-like game
+
+26-04-24:
+    Added character
+    Removed scrolling mechanic, overcomplicates code and game as the player cannot see where they are going
+    For road paths I used a piece of code to draw the lines so that i could visualise where they are while adjusting the
+    array containing the valid movement areas
+
+    Just discovered that the snake game creates a sequence length of 25, the sequences generated should be of an even
+    length
+
+    Began development of procedural generation of character options based on DNA sequences, so far I have been using
+    matplot lib as a way to edit images using code and have created a mask for both the bike and players clothes, now
+    when trying to save the image and using it in the game the resolution is wrong, and it contains the axis.
+    Using PIL instead but there seems to be a processing error. EASY FIX, just needed to set Image.fromArray(mode: 'RGBA'
+    instead of 'RGB', there is an alpha value as the character has transparency
