@@ -32,3 +32,7 @@
     now generates an image based on this, and when the paperboy game is ran, it automatically takes the image and uses
     it as the character.
 
+    When displaying each character to the player in the character selection screen, the characters are very blurry. This
+    is because PIL saves the image as 38x36, and in order for it to be an adequate size when displaying it to the
+    player I need to scale it up.
+    Added character selection functionality

@@ -1,5 +1,5 @@
 import pygame
-import sys
+from PIL import Image
 
 # Initialize Pygame
 pygame.init()
@@ -7,7 +7,8 @@ pygame.init()
 # Set up the screen
 width, height = 1500, 750
 game_display = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Scrolling Background")
+pygame.display.set_caption("DNA paperboy")
+font_style = pygame.font.SysFont("C:/Windows/Fonts/Arial.ttf", 35)
 
 # Define colors and their rgb values
 colours = {
@@ -19,17 +20,15 @@ colours = {
     'yellow': (255, 255, 0)
 }
 
-# Load the background image
+# Load the background images
 background = pygame.image.load("assets/background.jpg").convert()
 background_rect = background.get_rect()
 
+character_background = pygame.image.load("assets/Characters_screenBG.png")
+
+instructions = pygame.image.load("assets/Paperboy_Instructions.png").convert()
+
 # Set up the player
-# Takes image generated from character selection
-
-with open('snake_scores.csv', 'r') as f:
-    last_line = f.readlines()[-1]  # Extract filename
-
-playerImg = pygame.image.load("assets/character_options/" + last_line[:24] + ".png").convert_alpha()
 player = pygame.Rect(370, 0, 20, 20)
 player_speed = 5
 
@@ -57,13 +56,84 @@ roads = [
     pygame.Rect(1245, 737, 245, 1)]
 
 
+# Used to display text to the user
+def showText(msg, color, x, y):
+    msg = font_style.render(msg, True, color)
+    game_display.blit(msg, [x, y])
+
+
 # Player select function
+def playerSelect():
+    game_display.fill(colours['white'])
+    characterNo = 0
+    charSelection = True
+    forwardArrow = pygame.Rect(550, 333, 158, 158)
+    backwardArrow = pygame.Rect(950, 175, 158, 158)
+    playerSelection = ''
+
+    while charSelection:
+        # Takes last image generated from character selection
+        with open('snake_scores.csv', 'r') as f:
+            line = f.readlines()
+            line = line[(characterNo - 1) % len(line)]   # Extract filename
+
+        playerSelection = line[:24]
+        playerOnScreen = Image.open("assets/character_options/" + playerSelection + ".png")
+        playerOnScreen = playerOnScreen.resize((300, 300))
+
+        mode = playerOnScreen.mode
+        size = playerOnScreen.size
+        data = playerOnScreen.tobytes()
+
+        playerOnScreen = pygame.image.fromstring(data, size, mode).convert_alpha()
+
+        game_display.blit(character_background, (0, 0))
+        game_display.blit(playerOnScreen, (600, 175))
+        showText(line[:24], colours['black'], 570, 100)
+
+        pygame.display.update()
+
+        # Waits for the player to input
+        pygame.event.clear()
+        while True:
+            event = pygame.event.wait()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    charSelection = False
+                    break
+            if event.type == pygame.MOUSEBUTTONUP:
+                mousePos = pygame.mouse.get_pos()
+                if forwardArrow.collidepoint(mousePos):
+                    characterNo += 1
+                if backwardArrow.collidepoint(mousePos):
+                    characterNo -= 1
+                break
+
+    return playerSelection
+
+
+# Displays instructions and logo
+def displayInstructions():
+    game_display.blit(instructions, (0, 0))  # Displays instructions
+    pygame.display.update()
+
+    # Waits for the player to move on by pressing esc
+    pygame.event.clear()
+    while True:
+        event = pygame.event.wait()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                break
 
 
 # Main game function
 def main():
     # Used to end the game
     game_over = False
+
+    displayInstructions()
+    playerSelection = playerSelect()
+    playerImg = pygame.image.load("assets/character_options/" + playerSelection + ".png")
 
     # Main game loop
     while not game_over:

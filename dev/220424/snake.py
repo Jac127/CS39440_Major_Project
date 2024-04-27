@@ -24,7 +24,7 @@ playable_height = 320  # 320 is the height of the playable area
 pygame.display.set_caption('Snake Game Prototype')
 font_style = pygame.font.SysFont("C:/Windows/Fonts/Arial.ttf", 35)
 
-instructions = pygame.image.load("assets/instructions.jpg").convert()
+instructions = pygame.image.load("assets/Snake_Instructions.png").convert()
 gameLogo = pygame.image.load("assets/IntroScreen.jpg").convert()
 dnaImg = pygame.image.load("assets/DNA_halfstrand.jpg").convert()
 dnaTopImg = pygame.image.load("assets/DNA_tophalfstrand.jpg").convert()
