@@ -39,3 +39,22 @@
 
     Began developing the algorithm that decides the route that the player must take. Takes the DNA sequence and hashes
     it, then does a modulo operation to get numbers with 1-34 and returns 10 of them.
+
+28-04-24:
+
+    To display the houses that require delivery to the player, I was planning on drawing transparent rectangles over
+    the top of the houses, to give a highlighted effect, unfortunately pygame.draw does not draw alpha (needed for
+    transparency)
+
+    The game now registers when you deliver a paper to a house and removes the highlight from the screen as well as the
+    house from the list of deliveries
+
+    This piece of code does not seem to draw all 10 highlights
+    # Draw highlight of houses to deliver to
+        for house in houseNumbers:
+            pygame.draw.rect(game_display, colours['white'], houses[house], 3)
+
+    After some debugging, there were two issues with my code, firstly, the house numbers were not matching the array, as
+    they start at 1 instead of 0, and there was a duplicate house in the rect array
+
+    Finished implementation of paperboy, added time and endgame conditions / screen
